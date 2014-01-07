@@ -1,8 +1,8 @@
-# Ladino
+# About Ladino
 
 A modern latin dictionary, built with what I could extract from Whitaker's LATIN.
 
-# Dedication
+## Dedication
 
 For the benefit of those who keep the fire of civilization alive.
 
