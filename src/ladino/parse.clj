@@ -35,24 +35,6 @@
 
 (def endings-file "inflects.lat")
 
-#_(sm/defn process-line :- (s/maybe [s/String])
-    [parsed-line :- (s/maybe [s/String])]
-    ;; (frequencies (read-endings-file))
-    ;; => {0 1422, 6 9, 5 2, 11 419, 10 21, 12 341, 13 647, 14 346}
-    (let [masks {5  [:part-of-speech                              :declension :dunno :age :frequency]
-                 6  [:part-of-speech        :case                 :declension :dunno :age :frequency]
-                 10 [:part-of-speech :♥ :♥♥ :case :number :gender :declension :dunno :age :frequency]
-                 11 [:part-of-speech :♥ :♥♥ :case :number :gender :declension :dunno :age :frequency]
-                 12 []
-                 13 []
-                 14 []}]
-      (when (not (nil? parsed-line))
-        (zipmap (get masks (count parsed-line)) parsed-line))))
-
-(defmethod process-line :default [elements]
-  "HUEAHUEHUAHEUHAUEA"
-  )
-
 (defmethod process-line "INTERJ" [elements]
   (zipmap [:part-of-speech :declension :dunno :age :frequency] elements))
 
@@ -84,13 +66,26 @@
           elements))
 
 (defmethod process-line "VPAR" [elements]
-  elements)
+  (zipmap [:part-of-speech :declension :dunno2 :case :number :gender
+           :tense :voice :dunno5 :dunno3 :dunno4 :ending :age :frequency]
+          elements))
 
 (defmethod process-line "PRON" [elements]
-  elements)
+  (zipmap (case (count elements)
+            10 [:part-of-speech :declension :dunno2 :case :number :gender :dunno3 :dunno4         :age :frequency]
+            11 [:part-of-speech :declension :dunno2 :case :number :gender :dunno3 :dunno4 :ending :age :frequency])
+          elements))
 
 (defmethod process-line "SUPINE" [elements]
-  elements)
+  (zipmap [:part-of-speech :declension :dunno :case :number :gender :dunno3 :dunno4 :ending :age :frequency]
+          elements))
+
+(defmethod process-line "NUM" [elements]
+  (zipmap (case (count elements)
+            11 [:part-of-speech :declension :dunno :case :number :gender :dunno3 :dunno4 :ending :age :frequency]
+            12 [:part-of-speech :declension :dunno :case :number :gender :some-sort-of-type-i-guess
+                :dunno3 :dunno4 :ending :age :frequency])
+          elements))
 
 (defmulti process-line first)
 
@@ -105,7 +100,7 @@
     (loop [[h & tail :as lines] (file->lines endings-file)
            edn []]
       (if (empty? lines) edn
-          (if-let [parsed-line (-> h parse-line #_process-line)]
+          (if-let [parsed-line (-> h parse-line process-line)]
             (recur tail (conj edn parsed-line))
             (recur tail edn))))))
 
