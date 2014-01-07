@@ -35,19 +35,64 @@
 
 (def endings-file "inflects.lat")
 
-(sm/defn process-line :- (s/maybe [s/String])
-  [parsed-line :- (s/maybe [s/String])]
-  ;; (frequencies (read-endings-file))
-  ;; => {0 1422, 6 9, 5 2, 11 419, 10 21, 12 341, 13 647, 14 346}
-  (let [masks {5  [:part-of-speech :case :declension] ;; TODO
-               6  []   ;; TODO
-               10 []   ;; TODO
-               11 []   ;; TODO
-               12 []   ;; TODO
-               13 []   ;; TODO
-               14 []}] ;; TODO
-    (when (not (nil? parsed-line))
-      (zipmap (get masks (count parsed-line)) parsed-line))))
+#_(sm/defn process-line :- (s/maybe [s/String])
+    [parsed-line :- (s/maybe [s/String])]
+    ;; (frequencies (read-endings-file))
+    ;; => {0 1422, 6 9, 5 2, 11 419, 10 21, 12 341, 13 647, 14 346}
+    (let [masks {5  [:part-of-speech                              :declension :dunno :age :frequency]
+                 6  [:part-of-speech        :case                 :declension :dunno :age :frequency]
+                 10 [:part-of-speech :♥ :♥♥ :case :number :gender :declension :dunno :age :frequency]
+                 11 [:part-of-speech :♥ :♥♥ :case :number :gender :declension :dunno :age :frequency]
+                 12 []
+                 13 []
+                 14 []}]
+      (when (not (nil? parsed-line))
+        (zipmap (get masks (count parsed-line)) parsed-line))))
+
+(defmethod process-line :default [elements]
+  "HUEAHUEHUAHEUHAUEA"
+  )
+
+(defmethod process-line "INTERJ" [elements]
+  (zipmap [:part-of-speech :declension :dunno :age :frequency] elements))
+
+(defmethod process-line "ADV" [elements]
+  (zipmap [:part-of-speech :degree :declension :dunno :age :frequency] elements))
+
+(defmethod process-line "PREP" [elements]
+  (zipmap [:part-of-speech :case :declension :dunno :age :frequency] elements))
+
+(defmethod process-line "CONJ" [elements]
+  (zipmap [:part-of-speech :declension :dunno :age :frequency] elements))
+
+(defmethod process-line "N" [elements]
+  (zipmap (case (count elements)
+            10 [:part-of-speech :declension :dunno2 :case :number :gender :dunno :dunno3         :age :frequency]
+            11 [:part-of-speech :declension :dunno2 :case :number :gender :dunno :dunno3 :ending :age :frequency])
+          elements))
+
+(defmethod process-line "ADJ" [elements]
+  (zipmap (case (count elements)
+            11 [:part-of-speech :declension :dunno2 :case :number :gender :degree :dunno :dunno3         :age :frequency]
+            12 [:part-of-speech :declension :dunno2 :case :number :gender :degree :dunno :dunno3 :ending :age :frequency])
+          elements))
+
+(defmethod process-line "V" [elements]
+  (zipmap (case (count elements)
+            12 [:part-of-speech :declension :dunno2 :tense :voice :mood :person :number :dunno3 :dunno4         :age :frequency]
+            13 [:part-of-speech :declension :dunno2 :tense :voice :mood :person :number :dunno3 :dunno4 :ending :age :frequency])
+          elements))
+
+(defmethod process-line "VPAR" [elements]
+  elements)
+
+(defmethod process-line "PRON" [elements]
+  elements)
+
+(defmethod process-line "SUPINE" [elements]
+  elements)
+
+(defmulti process-line first)
 
 (sm/defn parse-line :- [s/String]
   [line :- s/String]
@@ -60,7 +105,7 @@
     (loop [[h & tail :as lines] (file->lines endings-file)
            edn []]
       (if (empty? lines) edn
-          (if-let [parsed-line (-> h parse-line process-line)]
+          (if-let [parsed-line (-> h parse-line #_process-line)]
             (recur tail (conj edn parsed-line))
             (recur tail edn))))))
 

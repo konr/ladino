@@ -1,0 +1,45 @@
+V "GNAT Lib v4.8"
+P SS ZX
+
+RN
+RV NO_SECONDARY_STACK
+RV SPARK
+
+U latin_file_names%b	latin_file_names.adb	5d6698ef NE OO PK IU
+W system.concat_3%s	s-conca3.adb		s-conca3.ali
+W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+
+U latin_file_names%s	latin_file_names.ads	02a42c5d EE NE OO PK IU
+
+D ada.ads		20070406091342 3ffc8e18
+D a-unccon.ads		20070406091342 f9eb8f06
+D latin_file_names.ads	20140107003201 02a42c5d
+D latin_file_names.adb	20140107003201 5fc2b4b2
+D system.ads		20120723080122 90249111
+D s-conca3.ads		20090420091404 762a026a
+D s-secsta.ads		20110830140625 eea35a36
+D s-stoele.ads		20090417130712 facd7d98
+D s-stoele.adb		20100617152355 afc5dc80
+X 3 latin_file_names.ads
+1K9*LATIN_FILE_NAMES 57l5 57e21 4|1b14 21l5 21t21
+26a3*INFLECTIONS_FULL_NAME{string}
+27a3*INFLECTIONS_SECTIONS_NAME{string}
+29a3*UNIQUES_FULL_NAME{string}
+30a3*ADDONS_FULL_NAME{string}
+33a3*MODE_FULL_NAME{string}
+34a3*OUTPUT_FULL_NAME{string}
+35a3*UNKNOWNS_FULL_NAME{string}
+36a3*PARSE_FULL_NAME{string}
+45a3*DICTIONARY_FILE_NAME{string}
+46a3*DICT_FILE_NAME{string}
+47a3*DICT_LINE_NAME{string}
+48a3*STEM_LIST_NAME{string}
+49a3*STEM_FILE_NAME{string}
+50a3*INDX_FILE_NAME{string}
+53V12*ADD_FILE_NAME_EXTENSION{string} 53>36 53>42 4|3b12 18l7 18t30
+53s36 NAME{string} 4|3b36 8r30 17r12
+53s42 EXTENSION{string} 4|3b42 9r35 14r8 17r41
+X 4 latin_file_names.adb
+8i5 NAME_LENGTH{integer} 11r8 12m7 17r20
+9i5 EXTENSION_LENGTH{integer} 15m7 17r54
+
