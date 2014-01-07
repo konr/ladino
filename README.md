@@ -1,13 +1,24 @@
-# ladino
+# Ladino
 
-A Clojure library designed to ... well, that part is up to you.
+A modern latin dictionary, built with what I could extract from Whitaker's LATIN.
 
-## Usage
+# Dedication
 
-FIXME
+For the benefit of those who keep the fire of civilization alive.
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2013 Konrad Scorciapino
 
-Distributed under the Eclipse Public License, the same as Clojure.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
