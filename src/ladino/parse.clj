@@ -15,20 +15,25 @@
           (s/with-fn-validation
             ~@forms)))
 
+(defn resource->lines [uri]
+  ((comp str/split-lines slurp clojure.java.io/resource) uri))
+
 ;;;;;;;;;;;;;;;;;
 ;;; Algorithm ;;;
 ;;;;;;;;;;;;;;;;;
 
 ;; 1. examine the ending of a word,
-(sm/defn word-endings :- [s/String]
+(sm/defn word-endings :- [{:stem s/String :ending s/String}]
   [word :- s/String]
-  (for [i (-> word count range reverse)]
-    (.substring word i)))
+  (let [lc (str/lower-case word)]
+    (for [i (-> word count range reverse)]
+      {:stem   (.substring lc 0 i)
+       :ending (.substring lc i)})))
 
 
 (facts* "on word-endings"
         (word-endings "Veritas")
-        => ["s" "as" "tas" "itas" "ritas" "eritas" "Veritas"]
+        => (contains [{:stem "verit" :ending "as"}])
         (type (word-endings "verbum"))
         => clojure.lang.LazySeq)
 
@@ -107,6 +112,37 @@
 
 ;; 3. derive the possible stems that could be consistent,
 ;; 4. compare those stems with a dictionary of stems,
+
+(def stemlist-file "stemlist.lat")
+
+;; FIX continue from here. always a part of speech has only one amount
+;; of elements
+
+
+(defmulti process-stemlist-line second)
+(defmethod process-stemlist-line "INTERJ" [elements]   (count elements))
+(defmethod process-stemlist-line "ADV" [elements]      (count elements))
+(defmethod process-stemlist-line "PREP" [elements]     (count elements))
+(defmethod process-stemlist-line "CONJ" [elements]     (count elements))
+(defmethod process-stemlist-line "N" [elements]        (count elements))
+(defmethod process-stemlist-line "ADJ" [elements]      (count elements))
+(defmethod process-stemlist-line "V" [elements]        (count elements))
+(defmethod process-stemlist-line "PRON" [elements]     (count elements))
+(defmethod process-stemlist-line "NUM" [elements]      (count elements))
+(defmethod process-stemlist-line "PACK" [elements]     (count elements))
+(defmethod process-stemlist-line :default [elements]
+  (process-stemlist-line (concat [""] elements)))
+
+
+(defn read-stemlist-file []
+    (->> stemlist-file resource->lines
+         (map (partial re-seq #"\w+"))
+         (map process-stemlist-line)
+         distinct
+         #_(zipmap [:stem :part-of-speech :declension :dunno2 ])))
+
+
+
 ;; 5. eliminate those for which the ending is inconsistent with the dictionary stem (e.g., a verb ending with a noun dictionary item),
 ;; 6. if unsuccessful, it tries with a large set of prefixes and suffixes, and various tackons (e.g., -que),
 ;; 7. finally it tries various "dirty tricks" (e.g., "ae" may be replaced by "e", inp by imp, syncope, etc.),
@@ -120,5 +156,6 @@
   (let [endings (word-endings word)
         db (read-endings-file)]
     (map ;; FIX don't do this for all digits
-     (fn [ending] (hash-map ending (filter #(= (:ending %) ending) db)))
+     (fn [{:keys [stem ending] :as all}]
+       (hash-map all (filter #(= (:ending %) ending) db)))
      endings)))
