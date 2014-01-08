@@ -1,6 +1,7 @@
 (ns ladino.parse
   (:require [schema.core   :as s]
             [schema.macros :as sm]
+            [swiss-arrows.core :refer :all]
             [clojure.string :as str]
             [midje.sweet    :refer :all]))
 
@@ -100,7 +101,7 @@
     (loop [[h & tail :as lines] (file->lines endings-file)
            edn []]
       (if (empty? lines) edn
-          (if-let [parsed-line (-> h parse-line process-line)]
+          (if-let [parsed-line (-?<> h parse-line process-line)]
             (recur tail (conj edn parsed-line))
             (recur tail edn))))))
 
@@ -110,3 +111,14 @@
 ;; 6. if unsuccessful, it tries with a large set of prefixes and suffixes, and various tackons (e.g., -que),
 ;; 7. finally it tries various "dirty tricks" (e.g., "ae" may be replaced by "e", inp by imp, syncope, etc.),
 ;; 8. and it reports any resulting matches as possible interpretations.
+
+
+
+;;;;;;;;;;;;;;;
+
+(defn parse [word]
+  (let [endings (word-endings word)
+        db (read-endings-file)]
+    (map ;; FIX don't do this for all digits
+     (fn [ending] (hash-map ending (filter #(= (:ending %) ending) db)))
+     endings)))
