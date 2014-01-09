@@ -155,11 +155,9 @@
 
 
 (defn read-stemlist-file []
-    (->> stemlist-file resource->lines
-         (map (partial re-seq #"\w+"))
-         (map process-stemlist-line)
-         distinct
-         #_(zipmap [:stem :part-of-speech :declension :dunno2 ])))
+  (->> stemlist-file resource->lines
+       (map (partial re-seq #"\w+"))
+       (map process-stemlist-line)))
 
 
 
@@ -174,8 +172,11 @@
 
 (defn parse [word]
   (let [endings (word-endings word)
-        db (read-endings-file)]
-    (map ;; FIX don't do this for all digits
-     (fn [{:keys [stem ending] :as all}]
-       (hash-map all (filter #(= (:ending %) ending) db)))
-     endings)))
+        stemlist (read-stemlist-file)
+        db (read-endings-file)
+        matches (map ;; FIX don't do this for all digits
+                 (fn [{:keys [stem ending] :as all}]
+                   [all (filter #(= (:ending %) ending) db)])
+                 endings)]
+    (for [[{:keys [stem ending]} matches] matches]
+      (filter #(= stem (:stem %)) stemlist))))
