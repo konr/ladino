@@ -120,16 +120,36 @@
 
 
 (defmulti process-stemlist-line second)
-(defmethod process-stemlist-line "INTERJ" [elements]   (count elements))
-(defmethod process-stemlist-line "ADV" [elements]      (count elements))
-(defmethod process-stemlist-line "PREP" [elements]     (count elements))
-(defmethod process-stemlist-line "CONJ" [elements]     (count elements))
-(defmethod process-stemlist-line "N" [elements]        (count elements))
-(defmethod process-stemlist-line "ADJ" [elements]      (count elements))
-(defmethod process-stemlist-line "V" [elements]        (count elements))
-(defmethod process-stemlist-line "PRON" [elements]     (count elements))
-(defmethod process-stemlist-line "NUM" [elements]      (count elements))
-(defmethod process-stemlist-line "PACK" [elements]     (count elements))
+(defmethod process-stemlist-line "INTERJ" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "ADV" [elements]
+  (zipmap [:stem :part-of-speech :degree :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "PREP" [elements]
+  (zipmap [:stem :part-of-speech :case :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "CONJ" [elements]
+  (zipmap [:stem :part-of-speech :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "N" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno2 :number :dunno-w-t :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "ADJ" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno2 :case :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "V" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno2 :transitivity :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "PRON" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno2 :kind :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "NUM" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno :kind :amount :dunno3 :reference] elements))
+
+(defmethod process-stemlist-line "PACK" [elements]
+  (zipmap [:stem :part-of-speech :declension :dunno :kind :dunno3 :reference] elements))
+
 (defmethod process-stemlist-line :default [elements]
   (process-stemlist-line (concat [""] elements)))
 
