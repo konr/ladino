@@ -41,6 +41,8 @@
 
 (def endings-file "inflects.lat")
 
+(defmulti process-line first)
+
 (defmethod process-line "INTERJ" [elements]
   (zipmap [:part-of-speech :declension :dunno :age :frequency] elements))
 
@@ -93,7 +95,6 @@
                 :dunno3 :dunno4 :ending :age :frequency])
           elements))
 
-(defmulti process-line first)
 
 (sm/defn parse-line :- [s/String]
   [line :- s/String]
