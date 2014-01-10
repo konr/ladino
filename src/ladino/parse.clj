@@ -63,8 +63,8 @@
 
 (defmethod process-line "ADJ" [elements]
   (zipmap (case (count elements)
-            11 [:part-of-speech :declension :dunno2 :case :number :gender :degree :key :size         :age :frequency]
-            12 [:part-of-speech :declension :dunno2 :case :number :gender :degree :key :size :ending :age :frequency])
+            11 [:part-of-speech :declension :variant :case :number :gender :degree :key :size         :age :frequency]
+            12 [:part-of-speech :declension :variant :case :number :gender :degree :key :size :ending :age :frequency])
           elements))
 
 (defmethod process-line "V" [elements]
@@ -120,34 +120,34 @@
 
 (defmulti process-stemlist-line second)
 (defmethod process-stemlist-line "INTERJ" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :key :reference] elements))
 
 (defmethod process-stemlist-line "ADV" [elements]
-  (zipmap [:stem :part-of-speech :degree :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :degree :key :reference] elements))
 
 (defmethod process-stemlist-line "PREP" [elements]
-  (zipmap [:stem :part-of-speech :case :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :case :key :reference] elements))
 
 (defmethod process-stemlist-line "CONJ" [elements]
-  (zipmap [:stem :part-of-speech :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :key :reference] elements))
 
 (defmethod process-stemlist-line "N" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno2 :number :dunno-w-t :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :variant :gender :number :key :reference] elements))
 
 (defmethod process-stemlist-line "ADJ" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno2 :case :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :variant :case :key :reference] elements))
 
 (defmethod process-stemlist-line "V" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno2 :transitivity :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :variant :transitivity :key :reference] elements))
 
 (defmethod process-stemlist-line "PRON" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno2 :kind :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :variant :kind :key :reference] elements))
 
 (defmethod process-stemlist-line "NUM" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno :kind :amount :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :variant :kind :amount :key :reference] elements))
 
 (defmethod process-stemlist-line "PACK" [elements]
-  (zipmap [:stem :part-of-speech :declension :dunno :kind :dunno3 :reference] elements))
+  (zipmap [:stem :part-of-speech :declension :variant :kind :key :reference] elements))
 
 (defmethod process-stemlist-line :default [elements]
   (process-stemlist-line (concat [""] elements)))
