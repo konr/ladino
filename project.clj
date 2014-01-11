@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [prismatic/schema "0.1.8"]
+                 [com.datomic/datomic-free "0.9.4384"]
                  [swiss-arrows "0.6.0"]]
   :plugins [[lein-midje "3.1.3"]]
   :profiles {:dev {:source-paths ["config"]
