@@ -3,9 +3,11 @@
             [schema.macros :as sm]
             [swiss-arrows.core :refer :all]
             [clojure.string :as str]
-            [midje.sweet    :refer :all]
             [ladino.schemata :as ls]
-            [ladino.peer :as lp]))
+            [ladino.queries :as lq]
+            [ladino.peer :as lp]
+            [ladino.utils :refer :all]
+            ))
 
 
 
@@ -38,5 +40,5 @@
 ;;;;;;;;;;;;;;;
 
 (defn parse [word]
-  (let [endings (word-endings word)]
-    endings))
+  (for [ending (word-endings word)]
+    (lq/match ending)))
