@@ -1,6 +1,7 @@
 (ns ladino.peer
   (:require [swiss-arrows.core :refer :all]
             [com.stuartsierra.component :as component]
+            [ladino.schemata :as ls]
             [schema.core :as s]
             [schema.macros :as sm]
             [datomic.api :as d]))
@@ -29,6 +30,8 @@
   (stop [component]))
 
 
+(defn db [] (d/db (:conn database)))
+
 (sm/defn ^:always-validate init-db!
   [data :- {:uri s/String
             :seed     [[{s/Keyword s/Any}]]
@@ -42,17 +45,24 @@
   (str "datomic:mem://" (d/squuid)))
 
 
-(defn tempid
+(sm/defn tempid :- ls/Eid
   ([] (tempid :db.part/user))
-  ([partition] (d/tempid partition)))
+  ([partition :- s/Keyword] (d/tempid partition)))
 
+
+(sm/defn resolve-tx :- ls/Eid
+  [tx     :- ls/TxResults
+   tempid :- ls/Eid]
+  (d/resolve-tempid (db) (:tempids tx) tempid))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Schema generation ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defn gen-attribute [ident map]
+(sm/defn gen-attribute :- ls/Entity
+  [ident :- s/Keyword
+   map   :- ls/Entity]
   (assert (keyword? ident))
   (conj
    {:db/id (tempid :db.part/db)
@@ -63,35 +73,49 @@
     :db.install/_attribute :db.part/db}
    map))
 
-(defn gen-datomic-attribute-seq [skeleton]
+(sm/defn gen-attribute-seq :- [ls/Entity]
+  [skeleton :- {s/Keyword ls/Entity}]
   (map (partial apply gen-attribute) skeleton))
 
+
+;;;;;;;;;;;;;;;;
+;; Operations ;;
+;;;;;;;;;;;;;;;;
+
+(sm/defn transact :- ls/TxResults
+  [data :- [ls/Entity]]
+  (->> data (d/transact (:conn database)) deref))
+
+(sm/defn transact-one :- ls/Eid
+  [entity :- ls/Entity]
+  (let [tempid (tempid)]
+    (-> entity (assoc :db/id tempid)
+        vector transact (resolve-tx tempid))))
 
 ;;;;;;;;;;;;
 ;; Models ;;
 ;;;;;;;;;;;;
 
 (def inflects-model
-  {:part-of-speech      {}                        
-   :declension          {}                    
-   :variant             {}                 
-   :case                {}              
-   :number              {}                
-   :gender              {}                
-   :degree              {}                
-   :key                 {}             
-   :size                {}              
-   :ending              {}                
-   :age                 {}             
-   :frequency           {}                   
-   :tense               {}               
-   :voice               {}               
-   :mood                {}              
-   :person              {}                
+  {:part-of-speech      {}
+   :declension          {}
+   :variant             {}
+   :case                {}
+   :number              {}
+   :gender              {}
+   :degree              {}
+   :key                 {}
+   :size                {}
+   :ending              {}
+   :age                 {}
+   :frequency           {}
+   :tense               {}
+   :voice               {}
+   :mood                {}
+   :person              {}
    :numeral-type        {}})
 
 
 
 (defn ♥ []
-  (init-db! {:uri (random-uri) :seed [] :schemata [(gen-datomic-attribute-seq inflects-model)]}))
-
+  (init-db! {:uri (random-uri) :seed [] :schemata [(gen-attribute-seq inflects-model)]}))
