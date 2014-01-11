@@ -59,7 +59,6 @@
 ;; Schema generation ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (sm/defn gen-attribute :- ls/Entity
   [ident :- s/Keyword
    map   :- ls/Entity]
@@ -81,6 +80,15 @@
 ;;;;;;;;;;;;;;;;
 ;; Operations ;;
 ;;;;;;;;;;;;;;;;
+
+(sm/defn eid->entity :- ls/Entity
+  [eid :- ls/Eid]
+  (->> eid (d/entity (db))
+       seq (into {})))
+
+(sm/defn q :- ls/ResultSet
+  [query :- ls/Query, & args]
+  (apply d/q query (db) args))
 
 (sm/defn transact :- ls/TxResults
   [data :- [ls/Entity]]

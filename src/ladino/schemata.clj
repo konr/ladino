@@ -13,6 +13,7 @@
 
 (def Eid (from-class Long))
 (def Database (from-class datomic.db.Db))
+(def ResultSet (from-class java.util.HashSet))
 
 (def TxResults
   {:db-before s/Any
@@ -22,4 +23,9 @@
 
 (def Entity
   {s/Keyword s/Any})
+
+(def Query
+  {(s/optional-key :find)  [s/Any]
+   (s/optional-key :in)    [s/Any]
+   (s/optional-key :where) [s/Any]})
 

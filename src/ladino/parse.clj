@@ -39,4 +39,4 @@
 
 (defn parse [word]
   (let [endings (word-endings word)]
-    ))
+    endings))
