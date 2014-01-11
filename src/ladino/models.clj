@@ -35,3 +35,5 @@
    :transitivity     {}
    :kind             {}
    :amount           {}})
+
+(def all-attributes (conj endings-model inflects-model))
