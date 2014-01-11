@@ -34,22 +34,34 @@
               ))
     ))
 
-
-(defn rules []
+(def rules
   '[[(same-part-of-speech ?a ?b ?pos)
      [?a :part-of-speech ?pos]
      [?b :part-of-speech ?pos]]
-    ])
+    [(has-equal ?a ?b ?key)
+     [?a ?key ?x]
+     [?b ?key ?x]]
+    [(consistent ?a ?b)
+     (same-part-of-speech ?a ?b "V")
+     (has-equal ?a ?b :declension)
+     ;;(has-equal ?a ?b :number) FIX why not?
+     ;;(has-equal ?a ?b :gender)
+     (has-equal ?a ?b :variant)]
+    [(consistent ?a ?b)
+     (same-part-of-speech ?a ?b "N")
+     (has-equal ?a ?b :declension)
+     (has-equal ?a ?b :variant)]])
 
-(sm/defn possible-parts-of-speech
+(defn match
   [{:keys [stem ending]}]
-  (let [query {:find '[?e] :in '[$ % ?stem ?ending]
+  (let [query {:find '[?e ?s] :in '[$ % ?stem ?ending]
                :where '[[?e :ending ?ending]
                         [?s :stem ?stem]
-                        (same-part-of-speech ?e ?s ?pos)]}]
-    (-<>> (lp/q query (rules) stem ending) (map first) set)))
+                        (consistent ?e ?s)]}]
+    (-<>> (lp/q query rules stem ending)
+          (map (partial map lp/eid->entity))
+          (map (partial apply merge))
+          clojure.pprint/print-table)))
 
-
-(defn match [{:keys [stem ending] :as obj}]
-  (for [part (possible-parts-of-speech obj)]
-    (find-matches part obj)))
+;; TEST
+(defn ♥ [] (match {:stem "can" :ending "is"}))

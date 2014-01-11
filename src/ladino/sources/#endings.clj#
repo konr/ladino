@@ -24,7 +24,6 @@
   (zipmap [:part-of-speech :declension :variant :age :frequency] elements))
 
 
-(def noun [:part-of-speech :declension :variant :case :number :gender :key :size :ending :age :frequency])
 (defmethod process-line "N" [elements]
   (zipmap (case (count elements)
             10 [:part-of-speech :declension :variant :case :number :gender :key :size         :age :frequency]
@@ -77,3 +76,5 @@
         (if-let [parsed-line (-?<> h parse-line process-line)]
           (recur tail (conj edn parsed-line))
           (recur tail edn)))))
+
+
