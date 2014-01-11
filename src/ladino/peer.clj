@@ -34,8 +34,8 @@
 
 (sm/defn ^:always-validate init-db!
   [data :- {:uri s/String
-            :seed     [[{s/Keyword s/Any}]]
-            :schemata [[{s/Keyword s/Any}]]}]
+            :seed     [[ls/Entity]]
+            :schemata [[ls/Entity]]}]
   (->> data map->Database
        .start
        (constantly)
@@ -92,30 +92,3 @@
     (-> entity (assoc :db/id tempid)
         vector transact (resolve-tx tempid))))
 
-;;;;;;;;;;;;
-;; Models ;;
-;;;;;;;;;;;;
-
-(def inflects-model
-  {:part-of-speech      {}
-   :declension          {}
-   :variant             {}
-   :case                {}
-   :number              {}
-   :gender              {}
-   :degree              {}
-   :key                 {}
-   :size                {}
-   :ending              {}
-   :age                 {}
-   :frequency           {}
-   :tense               {}
-   :voice               {}
-   :mood                {}
-   :person              {}
-   :numeral-type        {}})
-
-
-
-(defn ♥ []
-  (init-db! {:uri (random-uri) :seed [] :schemata [(gen-attribute-seq inflects-model)]}))
