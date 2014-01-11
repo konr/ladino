@@ -20,7 +20,9 @@
     (let [conn (d/connect uri)
           db   (d/db conn)]
       (assert conn) (assert db)
-      (doseq [♥ [schemata seed]] @(d/transact conn ♥))
+      (doseq [kind [schemata seed]]
+        (doseq [group kind]
+          @(d/transact conn group)))
       (-> component
           (assoc :uri   uri)
           (assoc :conn  conn))))
@@ -29,8 +31,8 @@
 
 (sm/defn ^:always-validate init-db!
   [data :- {:uri s/String
-            :seed     [{s/Keyword s/Any}]
-            :schemata [{s/Keyword s/Any}]}]
+            :seed     [[{s/Keyword s/Any}]]
+            :schemata [[{s/Keyword s/Any}]]}]
   (->> data map->Database
        .start
        (constantly)
@@ -65,4 +67,31 @@
   (map (partial apply gen-attribute) skeleton))
 
 
+;;;;;;;;;;;;
+;; Models ;;
+;;;;;;;;;;;;
+
+(def inflects-model
+  {:part-of-speech      {}                        
+   :declension          {}                    
+   :variant             {}                 
+   :case                {}              
+   :number              {}                
+   :gender              {}                
+   :degree              {}                
+   :key                 {}             
+   :size                {}              
+   :ending              {}                
+   :age                 {}             
+   :frequency           {}                   
+   :tense               {}               
+   :voice               {}               
+   :mood                {}              
+   :person              {}                
+   :numeral-type        {}})
+
+
+
+(defn ♥ []
+  (init-db! {:uri (random-uri) :seed [] :schemata [(gen-datomic-attribute-seq inflects-model)]}))
 
