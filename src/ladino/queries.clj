@@ -33,8 +33,7 @@
                         (consistent ?e ?s)]}]
     (-<>> (lp/q query rules stem ending)
           (map (partial map lp/eid->entity))
-          (map (partial apply merge))
-          clojure.pprint/print-table)))
+          (map (partial apply merge)))))
 
 ;; TEST
 (defn ♥ [] (match {:stem "can" :ending "is"}))

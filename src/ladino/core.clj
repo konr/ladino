@@ -1,4 +1,5 @@
 (ns ladino.core
+  (:gen-class)
   (:require [schema.core   :as s]
             [schema.macros :as sm]
             [swiss-arrows.core :refer :all]
@@ -9,7 +10,9 @@
             [ladino.models :as lm]
             ;; Data sources
             [ladino.sources.stemlist :as lss]
-            [ladino.sources.endings  :as lse]))
+            [ladino.sources.endings  :as lse]
+            ;;
+            [ladino.parse :as parse]))
 
 
 
@@ -26,3 +29,10 @@
 (defn initialize []
   (init-db)
   (read-sources))
+
+
+(defn -main [word]
+  (println "Initializing...")
+  (time (initialize))
+  (println (format "Parsing '%s'..." word))
+  (time (parse/parse word)))

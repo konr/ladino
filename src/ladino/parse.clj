@@ -2,11 +2,13 @@
   (:require [schema.core   :as s]
             [schema.macros :as sm]
             [swiss-arrows.core :refer :all]
+            [midje.sweet :refer :all]
             [clojure.string :as str]
             [ladino.schemata :as ls]
             [ladino.queries :as lq]
             [ladino.peer :as lp]
             [ladino.utils :refer :all]
+            [clojure.pprint :refer :all]
             ))
 
 
@@ -40,5 +42,6 @@
 ;;;;;;;;;;;;;;;
 
 (defn parse [word]
-  (for [ending (word-endings word)]
-    (lq/match ending)))
+  (doseq [ending (word-endings word)]
+    (print-table (lq/match ending))
+    (println "")))

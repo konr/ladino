@@ -11,5 +11,6 @@
   :plugins [[lein-midje "3.1.3"]]
   :profiles {:dev {:source-paths ["config"]
                    :dependencies [[midje "1.6.0" :exclusions [org.clojure/clojure]]]}}
+  :main ladino.core
 
   )

@@ -1,6 +1,7 @@
 (ns ladino.utils
   (:require [swiss-arrows.core :refer :all]
             [clojure.string :as str]
+            [midje.sweet :refer :all]
             [schema.core :as s]
             [schema.macros :as sm]))
 
