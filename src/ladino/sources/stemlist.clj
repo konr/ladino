@@ -13,9 +13,11 @@
 (defmethod process-stemlist-line "INTERJ" [elements]
   (zipmap [:stem :part-of-speech :declension :key :reference] elements))
 
+;; FIX where is the declension?
 (defmethod process-stemlist-line "ADV" [elements]
   (zipmap [:stem :part-of-speech :degree :key :reference] elements))
 
+;; FIX where is the declension?
 (defmethod process-stemlist-line "PREP" [elements]
   (zipmap [:stem :part-of-speech :case :key :reference] elements))
 
@@ -37,6 +39,7 @@
 (defmethod process-stemlist-line "NUM" [elements]
   (zipmap [:stem :part-of-speech :declension :variant :kind :amount :key :reference] elements))
 
+;; FIX what is pack?
 (defmethod process-stemlist-line "PACK" [elements]
   (zipmap [:stem :part-of-speech :declension :variant :kind :key :reference] elements))
 

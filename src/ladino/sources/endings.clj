@@ -42,6 +42,7 @@
             13 [:part-of-speech :declension :variant :tense :voice :mood :person :number :key :size :ending :age :frequency])
           elements))
 
+;; FIX missing - how to match?
 (defmethod process-line "VPAR" [elements]
   (zipmap [:part-of-speech :declension :variant :case :number :gender :tense :voice :mood :key :size :ending :age :frequency]
           elements))
@@ -52,6 +53,7 @@
             11 [:part-of-speech :declension :variant :case :number :gender :key :size :ending :age :frequency])
           elements))
 
+;; FIX missing - how to match?
 (defmethod process-line "SUPINE" [elements]
   (zipmap [:part-of-speech :declension :variant :case :number :gender :key :variant :ending :age :frequency]
           elements))
