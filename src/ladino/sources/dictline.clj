@@ -16,20 +16,24 @@
 (defmethod second-parse :default [map]
   nil)
 
-(defmethod second-parse "PRON" [{:keys [part-of-speech description words] :as map}]
-  (-> [:stem-1 :stem-2 :part-of-speech :declension :variant :kind :age :area :geo :frequency :source]
-      #_(zipmap word)
-      words
-      ))
+(defmethod second-parse "PRON" [{:keys [part-of-speech description pos-specific] :as map}]
+  (-> [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]
+      (zipmap pos-specific)))
 
 
 (sm/defn first-parse :- [s/String]
   [index :- s/Int
    line  :- s/String]
-  {:part-of-speech (-> line (.substring 76 82) .trim)
-   :index index
-   :description (-> line (.substring 110) .trim)
-   :words (re-seq #"\w+" (.substring line 0 110))})
+  (let [stuff (.substring line 0 100)
+        pos   (.substring line 76 82)
+        flags (.substring line 100 109)
+        descr (.substring line 110)]
+    (merge
+     (zipmap [:age :area :geo :frequency :source] (re-seq #"\w+" flags))
+     {:part-of-speech (.trim pos)
+      :description (.trim descr)
+      :index index
+      :pos-specific (re-seq #"\w+" stuff)})))
 
 (def age
   {"X"                 "--  In use throughout the ages/unknown -- the default"
@@ -142,7 +146,7 @@
        (map second-parse)
        (filter identity)
        #_(group-by :kind)
-       #_(map-vals (partial map (comp count :words)))
+       #_(map-vals (partial map (comp count :pos-specific)))
        #_(map-vals set)))
 
                                         ; => {"PRON" #{11}, "NUM" #{11 14}, "ADJ" #{10 11 13}, "CONJ" #{7}, "PREP" #{8}, "N" #{11 12}, "INTERJ" #{7}, "ADV" #{8 10}, "V" #{10 13}, "PACK" #{11}}
