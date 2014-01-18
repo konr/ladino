@@ -87,7 +87,7 @@
      (zipmap [:age :area :geo :frequency :source] (re-seq #"\w+" flags))
      {:part-of-speech (.trim pos)
       :description (.trim descr)
-      :index index
+      :index (inc index) ; zero-indexed
       :pos-specific (re-seq #"\w+" stuff)})))
 
 (def age
