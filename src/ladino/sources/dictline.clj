@@ -159,8 +159,7 @@
                            :db/doc "Mythology"}})
 
 (def source
-  {
-   :whitaker/unknown     {:representation "X"
+  {:whitaker/unknown     {:representation "X"
                           :db/doc "General or unknown or too common to say"}
    :whitaker/no-info-1   {:representation "A"
                           :db/doc ""}
@@ -214,24 +213,24 @@
                           :db/doc "Sent by user --  no dictionary reference"}})
 
 (def geo
-  {"X" "All or none"
-   "A" "Africa"
-   "B" "Britian"
-   "C" "China"
-   "D" "Scandinavia"
-   "E" "Egypt"
-   "F" "France, Gaul"
-   "G" "Germany"
-   "H" "Greece"
-   "I" "Italy, Rome"
-   "J" "India"
-   "K" "Balkans"
-   "N" "Netherlands"
-   "P" "Persia"
-   "Q" "Near East"
-   "R" "Russia"
-   "S" "Spain, Iberia"
-   "U" "Eastern Europe"})
+  {:whitaker/unknown        {:representation "X" :db/doc "All or none"}
+   :whitaker/africa         {:representation "A" :db/doc "Africa"}
+   :whitaker/britania       {:representation "B" :db/doc "Britian"}
+   :whitaker/china          {:representation "C" :db/doc "China"}
+   :whitaker/scandinavia    {:representation "D" :db/doc "Scandinavia"}
+   :whitaker/egypt          {:representation "E" :db/doc "Egypt"}
+   :whitaker/gaul           {:representation "F" :db/doc "France, Gaul"}
+   :whitaker/germania       {:representation "G" :db/doc "Germany"}
+   :whitaker/hellas         {:representation "H" :db/doc "Greece"}
+   :whitaker/italia         {:representation "I" :db/doc "Italy, Rome"}
+   :whitaker/india          {:representation "J" :db/doc "India"}
+   :whitaker/balkans        {:representation "K" :db/doc "Balkans"}
+   :whitaker/netherlands    {:representation "N" :db/doc "Netherlands"}
+   :whitaker/persia         {:representation "P" :db/doc "Persia"}
+   :whitaker/near-east      {:representation "Q" :db/doc "Near East"}
+   :whitaker/russia         {:representation "R" :db/doc "Russia"}
+   :whitaker/iberia         {:representation "S" :db/doc "Spain, Iberia"}
+   :whitaker/eastern-europa {:representation "U" :db/doc "Eastern Europe"}})
 
 ;; function NUMBER_OF_STEMS(P : PART_OF_SPEECH_TYPE) return STEM_KEY_TYPE is
 ;; begin
