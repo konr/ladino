@@ -111,16 +111,26 @@
                         :representation "H"}})
 
 (def frequency
-  {"X"                  "--  Unknown or unspecified"
-   "A"      "very freq   --  Very frequent, in all Elementry Latin books, top 1000+ words"
-   "B"      "frequent    --  Frequent, next 2000+ words"
-   "C"      "common      --  For Dictionary, in top 10,000 words"
-   "D"      "lesser      --  For Dictionary, in top 20,000 words"
-   "E"      "uncommon    --  2 or 3 citations"
-   "F"      "very rare   --  Having only single citation in OLD or L+S"
-   "I"      "inscription --  Only citation is inscription"
-   "M"      "graffiti    --  Presently not much used"
-   "N"      "Pliny       --  Things that appear only in Pliny Natural History"})
+  {:whitaker/unknown       {:representation "X"
+                            :db/doc "Unknown or unspecified"}
+   :whitaker/very-frequent {:representation "A"
+                            :db/doc "Very frequent, in all Elementry Latin books, top 1000+ words"}
+   :whitaker/frequent      {:representation "B"
+                            :db/doc "Frequent, next 2000+ words"}
+   :whitaker/common        {:representation "C"
+                            :db/doc "For Dictionary, in top 10,000 words"}
+   :whitaker/lesser-common {:representation "D"
+                            :db/doc "For Dictionary, in top 20,000 words"}
+   :whitaker/uncommon      {:representation "E"
+                            :db/doc "2 or 3 citations"}
+   :whitaker/very-rare     {:representation "F"
+                            :db/doc "Having only single citation in OLD or L+S"}
+   :whitaker/inscription   {:representation "I"
+                            :db/doc "Only citation is inscription"}
+   :whitaker/graffiti      {:representation "M"
+                            :db/doc "Presently not much used"}
+   :whitaker/pliny         {:representation "N"
+                            :db/doc "Things that appear only in Pliny Natural History"}})
 
 (def areas
   {"X" "All or none"
