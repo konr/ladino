@@ -90,16 +90,25 @@
       :index (inc index) ; zero-indexed
       :pos-specific (re-seq #"\w+" stuff)})))
 
-(def age
-  {"X"                 "--  In use throughout the ages/unknown -- the default"
-   "A"     "archaic     --  Very early forms, obsolete by classical times"
-   "B"     "early       --  Early Latin, pre-classical, used for effect/poetry"
-   "C"     "classical   --  Limited to classical (~150 BC - 200 AD)"
-   "D"     "late        --  Late, post-classical (3rd-5th centuries)"
-   "E"     "later       --  Latin not in use in Classical times (6-10) Christian"
-   "F"     "medieval    --  Medieval (11th-15th centuries)"
-   "G"     "scholar     --  Latin post 15th - Scholarly/Scientific   (16-18)"
-   "H"     "modern      --  Coined recently, words for new things (19-20)"})
+(def age-dictionary
+  {:whitaker/unknown   {:db/doc "In use throughout the ages/unknown -- the default"
+                        :representation "X"}
+   :whitaker/archaic   {:db/doc "Very early forms, obsolete by classical times"
+                        :representation "A"}
+   :whitaker/early     {:db/doc "Early Latin, pre-classical, used for effect/poetry"
+                        :representation "B"}
+   :whitaker/classical {:db/doc "Limited to classical (~150 BC - 200 AD)"
+                        :representation "C"}
+   :whitaker/late      {:db/doc "Late, post-classical (3rd-5th centuries)"
+                        :representation "D"}
+   :whitaker/later     {:db/doc "Latin not in use in Classical times (6-10) Christian"
+                        :representation "E"}
+   :whitaker/medieval  {:db/doc "Medieval (11th-15th centuries)"
+                        :representation "F"}
+   :whitaker/scholar   {:db/doc "Latin post 15th - Scholarly/Scientific   (16-18)"
+                        :representation "G"}
+   :whitaker/modern    {:db/doc "Coined recently, words for new things (19-20)"
+                        :representation "H"}})
 
 (def frequency
   {"X"                  "--  Unknown or unspecified"
