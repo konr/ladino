@@ -12,9 +12,8 @@
 
 (defmulti second-parse :part-of-speech)
 
-
 (defmethod second-parse :default [map]
-  nil)
+  (throw (Exception. "Error parsing file")))
 
 (defmethod second-parse "INTERJ" [{:keys [part-of-speech description pos-specific] :as map}]
   (-> [:stem-1 :part-of-speech]
@@ -22,6 +21,11 @@
       (conj map) (dissoc :pos-specific)))
 
 (defmethod second-parse "PRON" [{:keys [part-of-speech description pos-specific] :as map}]
+  (-> [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]
+      (zipmap pos-specific)
+      (conj map) (dissoc :pos-specific)))
+
+(defmethod second-parse "PACK" [{:keys [part-of-speech description pos-specific] :as map}]
   (-> [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]
       (zipmap pos-specific)
       (conj map) (dissoc :pos-specific)))
@@ -192,17 +196,6 @@
 
 
 (sm/defn parse-file []
-  (->> #_(resource->lines file)
-       #_(map-indexed first-parse)
-       ♥♥
-       (filter #(= (:part-of-speech %) "ADV"))
-       (map second-parse)
-       last
-       clojure.pprint/pprint
-       #_(filter identity)
-       #_(group-by :kind)
-       #_(map-vals (partial map (comp count :pos-specific)))
-       #_(map-vals set)))
-
-;; {
-;; "PACK" #{11}} ; 6
+  (->> (resource->lines file)
+       (map-indexed first-parse)
+       (map second-parse)))
