@@ -133,18 +133,30 @@
                             :db/doc "Things that appear only in Pliny Natural History"}})
 
 (def areas
-  {"X" "All or none"
-   "A" "Agriculture, Flora, Fauna, Land, Equipment, Rural"
-   "B" "Biological, Medical, Body Parts"
-   "D" "Drama, Music, Theater, Art, Painting, Sculpture"
-   "E" "Ecclesiastic, Biblical, Religious"
-   "G" "Grammar, Retoric, Logic, Literature, Schools"
-   "L" "Legal, Government, Tax, Financial, Political, Titles"
-   "P" "Poetic"
-   "S" "Science, Philosophy, Mathematics, Units/Measures"
-   "T" "Technical, Architecture, Topography, Surveying"
-   "W" "War, Military, Naval, Ships, Armor"
-   "Y" "Mythology"})
+  {:whitaker/unknown      {:representation "X"
+                           :db/doc "All or none"}
+   :whitaker/agriculture  {:representation "A"
+                           :db/doc "Agriculture, Flora, Fauna, Land, Equipment, Rural"}
+   :whitaker/biological   {:representation "B"
+                           :db/doc "Biological, Medical, Body Parts"}
+   :whitaker/drama        {:representation "D"
+                           :db/doc "Drama, Music, Theater, Art, Painting, Sculpture"}
+   :whitaker/ecclesiastic {:representation "E"
+                           :db/doc "Ecclesiastic, Biblical, Religious"}
+   :whitaker/grammar      {:representation "G"
+                           :db/doc "Grammar, Retoric, Logic, Literature, Schools"}
+   :whitaker/legal        {:representation "L"
+                           :db/doc "Legal, Government, Tax, Financial, Political, Titles"}
+   :whitaker/poetic       {:representation "P"
+                           :db/doc "Poetic"}
+   :whitaker/science      {:representation "S"
+                           :db/doc "Science, Philosophy, Mathematics, Units/Measures"}
+   :whitaker/technical    {:representation "T"
+                           :db/doc "Technical, Architecture, Topography, Surveying"}
+   :whitaker/war          {:representation "W"
+                           :db/doc "War, Military, Naval, Ships, Armor"}
+   :whitaker/mythology    {:representation "Y"
+                           :db/doc "Mythology"}})
 
 (def source
   {"X" "General or unknown or too common to say"
