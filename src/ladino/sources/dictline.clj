@@ -31,6 +31,18 @@
       (zipmap pos-specific)
       (conj map) (dissoc :pos-specific)))
 
+(defmethod second-parse "PREP" [{:keys [part-of-speech description pos-specific] :as map}]
+  (-> [:stem-1 :part-of-speech :case]
+      (zipmap pos-specific)
+      (conj map) (dissoc :pos-specific)))
+
+(defmethod second-parse "NUM" [{:keys [part-of-speech description pos-specific] :as map}]
+  (-> (count pos-specific)
+      (case 6 [:stem-1                         :part-of-speech :declension :variant :kind :amount]
+            9 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :kind :amount])
+      (zipmap pos-specific)
+      (conj map) (dissoc :pos-specific)))
+
 
 (sm/defn first-parse :- [s/String]
   [index :- s/Int
@@ -152,10 +164,10 @@
 
 
 (sm/defn parse-file []
-  (->> (resource->lines file)
-       (map-indexed first-parse)
-       #_♥♥
-       (filter #(= (:part-of-speech %) "CONJ"))
+  (->> #_(resource->lines file)
+       #_(map-indexed first-parse)
+       ♥♥
+       (filter #(= (:part-of-speech %) "NUM"))
        (map second-parse)
        last
        clojure.pprint/pprint
@@ -165,11 +177,9 @@
        #_(map-vals set)))
 
 ;; {
-;; "NUM" #{11 14}
-;; "ADJ" #{10 11 13}
-;; "CONJ" #{7}
-;; "PREP" #{8}
-;; "N" #{11 12}
-;; "ADV" #{8 10}
-;; "V" #{10 13}
-;; "PACK" #{11}}
+;; "NUM" #{11 14} ; 6 9
+;; "ADJ" #{10 11 13} ; 5 6 8
+;; "N" #{11 12} ; 6 7
+;; "ADV" #{8 10} ; 3 5
+;; "V" #{10 13} ; 5 8
+;; "PACK" #{11}} ; 6
