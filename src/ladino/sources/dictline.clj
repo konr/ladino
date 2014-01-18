@@ -159,32 +159,59 @@
                            :db/doc "Mythology"}})
 
 (def source
-  {"X" "General or unknown or too common to say"
-   "A" ""
-   "B" "C.H.Beeson, A Primer of Medieval Latin, 1925 (Bee)"
-   "C" "Charles Beard, Cassell's Latin Dictionary 1892 (Cas)"
-   "D" "J.N.Adams, Latin Sexual Vocabulary, 1982 (Sex)"
-   "E" "L.F.Stelten, Dictionary of Eccles. Latin, 1995 (Ecc)"
-   "F" "Roy J. Deferrari, Dictionary of St. Thomas Aquinas, 1960 (DeF)"
-   "G" "Gildersleeve + Lodge, Latin Grammar 1895 (G+L)"
-   "H" "Collatinus Dictionary by Yves Ouvrard "
-   "I" "Leverett, F.P., Lexicon of the Latin Language, Boston 1845"
-   "J" "Bracton: De Legibus Et Consuetudinibus Angliæ"
-   "K" "Calepinus Novus, modern Latin, by Guy Licoppe (Cal)"
-   "L" "Lewis, C.S., Elementary Latin Dictionary 1891"
-   "M" "Latham, Revised Medieval Word List, 1980 (Latham)"
-   "N" "Lynn Nelson, Wordlist (Nel)"
-   "O" "Oxford Latin Dictionary, 1982 (OLD)"
-   "P" "Souter, A Glossary of Later Latin to 600 A.D., Oxford 1949 (Souter)"
-   "Q" "Other, cited or unspecified dictionaries"
-   "R" "Plater + White, A Grammar of the Vulgate, Oxford 1926 (Plater)"
-   "S" "Lewis and Short, A Latin Dictionary, 1879 (L+S)"
-   "T" "Found in a translation  --  no dictionary reference"
-   "U" ""
-   "V" "Vademecum in opus Saxonis - Franz Blatt (Saxo)"
-   "W" "My personal guess, mostly obvious extrapolation (Whitaker or W)   "
-   "Y" "Temp special code"
-   "Z" "Sent by user --  no dictionary reference"})
+  {
+   :whitaker/unknown     {:representation "X"
+                          :db/doc "General or unknown or too common to say"}
+   :whitaker/no-info-1   {:representation "A"
+                          :db/doc ""}
+   :whitaker/bee         {:representation "B"
+                          :db/doc "C.H.Beeson, A Primer of Medieval Latin, 1925 (Bee)"}
+   :whitaker/cas         {:representation "C"
+                          :db/doc "Charles Beard, Cassell's Latin Dictionary 1892 (Cas)"}
+   :whitaker/sex         {:representation "D"
+                          :db/doc "J.N.Adams, Latin Sexual Vocabulary, 1982 (Sex)"}
+   :whitaker/ecc         {:representation "E"
+                          :db/doc "L.F.Stelten, Dictionary of Eccles. Latin, 1995 (Ecc)"}
+   :whitaker/def         {:representation "F"
+                          :db/doc "Roy J. Deferrari, Dictionary of St. Thomas Aquinas, 1960 (DeF)"}
+   :whitaker/g+l         {:representation "G"
+                          :db/doc "Gildersleeve + Lodge, Latin Grammar 1895 (G+L)"}
+   :whitaker/yves        {:representation "H"
+                          :db/doc "Collatinus Dictionary by Yves Ouvrard "}
+   :whitaker/lexicon     {:representation "I"
+                          :db/doc "Leverett, F.P., Lexicon of the Latin Language, Boston 1845"}
+   :whitaker/bracton     {:representation "J"
+                          :db/doc "Bracton: De Legibus Et Consuetudinibus Angliæ"}
+   :whitaker/cal         {:representation "K"
+                          :db/doc "Calepinus Novus, modern Latin, by Guy Licoppe (Cal)"}
+   :whitaker/lewis       {:representation "L"
+                          :db/doc "Lewis, C.S., Elementary Latin Dictionary 1891"}
+   :whitaker/latham      {:representation "M"
+                          :db/doc "Latham, Revised Medieval Word List, 1980 (Latham)"}
+   :whitaker/nel         {:representation "N"
+                          :db/doc "Lynn Nelson, Wordlist (Nel)"}
+   :whitaker/old         {:representation "O"
+                          :db/doc "Oxford Latin Dictionary, 1982 (OLD)"}
+   :whitaker/souter      {:representation "P"
+                          :db/doc "Souter, A Glossary of Later Latin to 600 A.D., Oxford 1949 (Souter)"}
+   :whitaker/other       {:representation "Q"
+                          :db/doc "Other, cited or unspecified dictionaries"}
+   :whitaker/plater      {:representation "R"
+                          :db/doc "Plater + White, A Grammar of the Vulgate, Oxford 1926 (Plater)"}
+   :whitaker/l+s         {:representation "S"
+                          :db/doc "Lewis and Short, A Latin Dictionary, 1879 (L+S)"}
+   :whitaker/translation {:representation "T"
+                          :db/doc "Found in a translation  --  no dictionary reference"}
+   :whitaker/no-info-2   {:representation "U"
+                          :db/doc ""}
+   :whitaker/saxo        {:representation "V"
+                          :db/doc "Vademecum in opus Saxonis - Franz Blatt (Saxo)"}
+   :whitaker/whitaker    {:representation "W"
+                          :db/doc "My personal guess, mostly obvious extrapolation (Whitaker or W)   "}
+   :whitaker/temp        {:representation "Y"
+                          :db/doc "Temp special code"}
+   :whitaker/user        {:representation "Z"
+                          :db/doc "Sent by user --  no dictionary reference"}})
 
 (def geo
   {"X" "All or none"
