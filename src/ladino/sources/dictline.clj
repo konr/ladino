@@ -52,6 +52,13 @@
       (conj map) (dissoc :pos-specific)))
 
 
+(defmethod second-parse "N" [{:keys [part-of-speech description pos-specific] :as map}]
+  (-> (count pos-specific)
+      (case 6 [:stem-1         :part-of-speech :declension :variant :gender :number]
+            7 [:stem-1 :stem-2 :part-of-speech :declension :variant :gender :number])
+      (zipmap pos-specific)
+      (conj map) (dissoc :pos-specific)))
+
 (sm/defn first-parse :- [s/String]
   [index :- s/Int
    line  :- s/String]
@@ -175,7 +182,7 @@
   (->> #_(resource->lines file)
        #_(map-indexed first-parse)
        ♥♥
-       (filter #(= (:part-of-speech %) "ADJ"))
+       (filter #(= (:part-of-speech %) "N"))
        (map second-parse)
        last
        clojure.pprint/pprint
@@ -185,7 +192,6 @@
        #_(map-vals set)))
 
 ;; {
-;; "N" #{11 12} ; 6 7
 ;; "ADV" #{8 10} ; 3 5
 ;; "V" #{10 13} ; 5 8
 ;; "PACK" #{11}} ; 6
