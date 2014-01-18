@@ -6,11 +6,14 @@
             [clojure.string :as str]
             [midje.sweet    :refer :all]
             [ladino.schemata :as ls]
-            [ladino.peer :as lp]
-            [ladino.models :as lm]
             ;; Data sources
             [ladino.sources.stemlist :as lss]
             [ladino.sources.endings  :as lse]
+            ;; DB
+            [ladino.peer :as lp]
+            [ladino.models.extensions :as ext]
+            [ladino.models.enums :as enums]
+            [ladino.models :as lm]
             ;;
             [ladino.parse :as parse]))
 
@@ -24,7 +27,10 @@
 
 
 (defn init-db []
-  (lp/init-db! {:uri (lp/random-uri) :seed [] :schemata [(lp/gen-attribute-seq lm/all-attributes)]}))
+  (lp/init-db! {:uri (lp/random-uri)
+             :extensions [(map #(assoc % :db/id (lp/tempid :db.part/db)) ext/schema-attributes)]
+             :seed (map (partial map #(assoc % :db/id (lp/tempid :db.part/db))) enums/all-enums)
+             :schemata [(lp/gen-attribute-seq lm/all-attributes)]}))
 
 (defn initialize []
   (init-db)

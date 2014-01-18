@@ -13,7 +13,7 @@
 
 (defonce database nil)
 
-(defrecord Database [uri conn seed schemata]
+(defrecord Database [uri conn seed schemata extensions]
   component/Lifecycle
 
   (start [component]
@@ -21,7 +21,7 @@
     (let [conn (d/connect uri)
           db   (d/db conn)]
       (assert conn) (assert db)
-      (doseq [kind [schemata seed]]
+      (doseq [kind [extensions schemata seed]]
         (doseq [group kind]
           @(d/transact conn group)))
       (-> component
@@ -34,8 +34,9 @@
 
 (sm/defn ^:always-validate init-db!
   [data :- {:uri s/String
-            :seed     [[ls/Entity]]
-            :schemata [[ls/Entity]]}]
+            :extensions [[ls/Entity]]
+            :seed       [[ls/Entity]]
+            :schemata   [[ls/Entity]]}]
   (->> data map->Database
        .start
        (constantly)
@@ -54,6 +55,8 @@
   [tx     :- ls/TxResults
    tempid :- ls/Eid]
   (d/resolve-tempid (db) (:tempids tx) tempid))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Schema generation ;;
@@ -99,4 +102,3 @@
   (let [tempid (tempid)]
     (-> entity (assoc :db/id tempid)
         vector transact (resolve-tx tempid))))
-
