@@ -3,6 +3,7 @@
             [schema.macros :as sm]
             [ladino.schemata :as ls]
             [clojure.string :as str]
+            [ladino.models.enums :as enums]
             [swiss-arrows.core :refer :all]
             [ladino.utils   :refer :all]
             [midje.sweet    :refer :all]))
@@ -11,6 +12,10 @@
 
 
 (defmulti second-parse :part-of-speech)
+
+(defn blarg [abc]
+  (-> 3))
+
 
 (defmethod second-parse :default [map]
   (throw (Exception. "Error parsing file")))
@@ -82,9 +87,16 @@
   (let [stuff (.substring line 0 100)
         pos   (.substring line 76 82)
         flags (.substring line 100 109)
-        descr (.substring line 110)]
+        descr (.substring line 110)
+        age-map     (enums/build enums/age)
+        freq-map    (enums/build enums/frequency)
+        area-map    (enums/build enums/areas)
+        source-map  (enums/build enums/sources)
+        geo-map     (enums/build enums/geo)]
     (merge
-     (zipmap [:age :area :geo :frequency :source] (re-seq #"\w+" flags))
+     (->> (re-seq #"\w+" flags)
+          (map #(%1 %2) [age-map area-map geo-map freq-map source-map])
+          (zipmap [:whitaker/age :whitaker/area :whitaker/geo :whitaker/frequency :whitaker/source]))
      {:part-of-speech (.trim pos)
       :description (.trim descr)
       :index (inc index) ; zero-indexed

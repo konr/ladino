@@ -1,6 +1,6 @@
 (ns ladino.models.enums)
 
-(def age-dictionary
+(def age
   [{:db/ident  :whitaker.age/unknown
     :db/doc "In use throughout the ages/unknown -- the default"
     :whitaker/representation "X"}
@@ -99,7 +99,7 @@
     :whitaker/representation "Y"
     :db/doc "Mythology"}])
 
-(def source
+(def sources
   [{:db/ident  :whitaker.source/unknown
     :whitaker/representation "X"
     :db/doc "General or unknown or too common to say"}
@@ -237,3 +237,6 @@
 
 
 (def all-enums [age-dictionary frequency areas source geo])
+
+(defn build [m]
+  (zipmap (map :whitaker/representation m) (map :db/ident m)))
