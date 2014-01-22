@@ -236,7 +236,7 @@
     :db/doc "Eastern Europe"}])
 
 
-(def all-enums [age-dictionary frequency areas source geo])
+(def all-enums [age frequency areas sources geo])
 
 (defn build [m]
   (zipmap (map :whitaker/representation m) (map :db/ident m)))

@@ -11,39 +11,42 @@
 (def file "dictline.lat")
 
 
+
+
+(defmulti parse-token (fn [k v] k))
+
+
+(defmethod parse-token :default [k v] v)
+(defmethod parse-token :part-of-speech [k v] v)
+
+
+;; ----------------
+
+
+(defn parse-terms [list map]
+  (-<> list (zipmap (:pos-specific map))
+      (map-vals* parse-token <>)
+      (conj map) (dissoc :pos-specific)))
+
 (defmulti second-parse :part-of-speech)
-
-(defn blarg [abc]
-  (-> 3))
-
 
 (defmethod second-parse :default [map]
   (throw (Exception. "Error parsing file")))
 
-(defmethod second-parse "INTERJ" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> [:stem-1 :part-of-speech]
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+(defmethod second-parse "INTERJ" [map]
+  (parse-terms [:stem-1 :part-of-speech] map))
 
-(defmethod second-parse "PRON" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+(defmethod second-parse "PRON" [map]
+  (parse-terms [:stem-1 :stem-2 :part-of-speech :declension :variant :kind] map))
 
-(defmethod second-parse "PACK" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+(defmethod second-parse "PACK" [map]
+  (parse-terms [:stem-1 :stem-2 :part-of-speech :declension :variant :kind] map))
 
-(defmethod second-parse "CONJ" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> [:stem-1 :part-of-speech]
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+(defmethod second-parse "CONJ" [map]
+  (parse-terms [:stem-1 :part-of-speech] map))
 
-(defmethod second-parse "PREP" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> [:stem-1 :part-of-speech :case]
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+(defmethod second-parse "PREP" [map]
+  (parse-terms [:stem-1 :part-of-speech :case] map))
 
 (defmethod second-parse "NUM" [{:keys [part-of-speech description pos-specific] :as map}]
   (-> (count pos-specific)
@@ -88,11 +91,11 @@
         pos   (.substring line 76 82)
         flags (.substring line 100 109)
         descr (.substring line 110)
-        age-map     (enums/build enums/age)
-        freq-map    (enums/build enums/frequency)
-        area-map    (enums/build enums/areas)
-        source-map  (enums/build enums/sources)
-        geo-map     (enums/build enums/geo)]
+        age-map    (enums/build enums/age)
+        freq-map   (enums/build enums/frequency)
+        area-map   (enums/build enums/areas)
+        source-map (enums/build enums/sources)
+        geo-map    (enums/build enums/geo)]
     (merge
      (->> (re-seq #"\w+" flags)
           (map #(%1 %2) [age-map area-map geo-map freq-map source-map])
