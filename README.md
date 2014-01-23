@@ -1,6 +1,6 @@
 # About Ladino
 
-A modern latin dictionary, built with what I could extract from Whitaker's LATIN.
+A modern latin dictionary, built with what I could extract from Whitaker's WORDS.
 
 ## Dedication
 
