@@ -3,6 +3,7 @@
             [schema.macros :as sm]
             [ladino.schemata :as ls]
             [clojure.string :as str]
+            [datomic.api :as d :refer [q]]
             [ladino.models.enums :as enums]
             [swiss-arrows.core :refer :all]
             [ladino.utils   :refer :all]
@@ -23,61 +24,34 @@
 ;; ----------------
 
 
-(defn parse-terms [list map]
-  (-<> list (zipmap (:pos-specific map))
+(def rules
+  [["INTERJ" [:stem-1 :part-of-speech]]
+   ["PRON"   [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]]
+   ["PACK"   [:stem-1 :stem-2 :part-of-speech :declension :variant :kind]]
+   ["CONJ"   [:stem-1 :part-of-speech]]
+   ["PREP"   [:stem-1 :part-of-speech :case]]
+   ["NUM"    [:stem-1                         :part-of-speech :declension :variant :kind :amount]]
+   ["NUM"    [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :kind :amount]]
+   ["ADJ"    [:stem-1                         :part-of-speech :declension :variant :degree]]
+   ["ADJ"    [:stem-1 :stem-2                 :part-of-speech :declension :variant :degree]]
+   ["ADJ"    [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :degree]]
+   ["ADV"    [:stem-1                 :part-of-speech :degree]]
+   ["ADV"    [:stem-1 :stem-2 :stem-3 :part-of-speech :degree]]
+   ["N"      [:stem-1         :part-of-speech :declension :variant :gender :number]]
+   ["N"      [:stem-1 :stem-2 :part-of-speech :declension :variant :gender :number]]
+   ["V"      [:stem-1                         :part-of-speech :declension :variant :transitivity]]
+   ["V"      [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :transitivity]]])
+
+(defn parse-terms [map list]
+  (-<> list (zipmap (:specific map))
        (map-vals* parse-token <>)
-       (conj map) (dissoc :pos-specific)))
+       (conj map) (dissoc :specific)))
 
-(defmulti second-parse :part-of-speech)
-
-(defmethod second-parse :default [map]
-  (throw (Exception. "Error parsing file")))
-
-(defmethod second-parse "INTERJ" [map]
-  (parse-terms [:stem-1 :part-of-speech] map))
-
-(defmethod second-parse "PRON" [map]
-  (parse-terms [:stem-1 :stem-2 :part-of-speech :declension :variant :kind] map))
-
-(defmethod second-parse "PACK" [map]
-  (parse-terms [:stem-1 :stem-2 :part-of-speech :declension :variant :kind] map))
-
-(defmethod second-parse "CONJ" [map]
-  (parse-terms [:stem-1 :part-of-speech] map))
-
-(defmethod second-parse "PREP" [map]
-  (parse-terms [:stem-1 :part-of-speech :case] map))
-
-(defmethod second-parse "NUM" [{:keys [part-of-speech description pos-specific] :as map}]
-  (parse-terms
-   (case 6 [:stem-1                         :part-of-speech :declension :variant :kind :amount]
-         9 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :kind :amount])
-   map))
-
-(defmethod second-parse "ADJ" [{:keys [part-of-speech description pos-specific] :as map}]
-  (parse-terms
-   (case 5 [:stem-1                         :part-of-speech :declension :variant :degree]
-         6 [:stem-1 :stem-2                 :part-of-speech :declension :variant :degree]
-         8 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :degree])
-   map))
-
-(defmethod second-parse "ADV" [{:keys [part-of-speech description pos-specific] :as map}]
-  (parse-terms
-   (case 3 [:stem-1                 :part-of-speech :degree]
-         5 [:stem-1 :stem-2 :stem-3 :part-of-speech :degree])
-   map))
-
-(defmethod second-parse "N" [{:keys [part-of-speech description pos-specific] :as map}]
-  (parse-terms
-   (case 6 [:stem-1         :part-of-speech :declension :variant :gender :number]
-         7 [:stem-1 :stem-2 :part-of-speech :declension :variant :gender :number])
-   map))
-
-(defmethod second-parse "V" [{:keys [part-of-speech description pos-specific] :as map}]
-  (parse-terms
-   (case 5 [:stem-1                         :part-of-speech :declension :variant :transitivity]
-         8 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :transitivity])
-   map))
+(sm/defn second-parse
+  [{:keys [specific part-of-speech] :as entry}]
+  ;; FIX use datalog instead :D
+  (->> rules (find-first (fn [[pos stems]] (and (= pos part-of-speech) (= (count specific) (count stems)))))
+       second (parse-terms entry)))
 
 (sm/defn first-parse :- [s/String]
   [index :- s/Int
@@ -98,27 +72,7 @@
      {:part-of-speech (.trim pos)
       :description (.trim descr)
       :index (inc index) ; zero-indexed
-      :pos-specific (re-seq #"\w+" stuff)})))
-
-
-;; function NUMBER_OF_STEMS(P : PART_OF_SPEECH_TYPE) return STEM_KEY_TYPE is
-;; begin
-;;   case P is
-;;     when N       => return 2;
-;;     when PRON    => return 2;
-;;     when PACK    => return 2;
-;;     when ADJ     => return 4;
-;;     when NUM     => return 4;
-;;     when ADV     => return 3;
-;;     when V       => return 4;
-;;     when VPAR    => return 0;
-;;     when SUPINE  => return 0;
-;;     when PREP    => return 1;
-;;     when CONJ    => return 1;
-;;     when INTERJ  => return 1;
-;;     when others  => return 0;
-;;   end case;
-;; end NUMBER_OF_STEMS;
+      :specific (re-seq #"\w+" stuff)})))
 
 
 (sm/defn parse-file []

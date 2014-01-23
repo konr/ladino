@@ -29,3 +29,7 @@
 (defn map-vals* [function map]
   (loop [[[k v] & tail :as all] (vec map) new-map {}]
     (if-not (seq all) new-map (recur tail (assoc new-map k (function k v))))))
+
+
+(defn find-first [fn seq]
+  (first (filter fn seq)))
