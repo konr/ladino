@@ -25,8 +25,8 @@
 
 (defn parse-terms [list map]
   (-<> list (zipmap (:pos-specific map))
-      (map-vals* parse-token <>)
-      (conj map) (dissoc :pos-specific)))
+       (map-vals* parse-token <>)
+       (conj map) (dissoc :pos-specific)))
 
 (defmulti second-parse :part-of-speech)
 
@@ -49,40 +49,35 @@
   (parse-terms [:stem-1 :part-of-speech :case] map))
 
 (defmethod second-parse "NUM" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> (count pos-specific)
-      (case 6 [:stem-1                         :part-of-speech :declension :variant :kind :amount]
-            9 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :kind :amount])
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+  (parse-terms
+   (case 6 [:stem-1                         :part-of-speech :declension :variant :kind :amount]
+         9 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :kind :amount])
+   map))
 
 (defmethod second-parse "ADJ" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> (count pos-specific)
-      (case 5 [:stem-1                         :part-of-speech :declension :variant :degree]
-            6 [:stem-1 :stem-2                 :part-of-speech :declension :variant :degree]
-            8 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :degree])
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+  (parse-terms
+   (case 5 [:stem-1                         :part-of-speech :declension :variant :degree]
+         6 [:stem-1 :stem-2                 :part-of-speech :declension :variant :degree]
+         8 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :degree])
+   map))
 
 (defmethod second-parse "ADV" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> (count pos-specific)
-      (case 3 [:stem-1                 :part-of-speech :degree]
-            5 [:stem-1 :stem-2 :stem-3 :part-of-speech :degree])
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+  (parse-terms
+   (case 3 [:stem-1                 :part-of-speech :degree]
+         5 [:stem-1 :stem-2 :stem-3 :part-of-speech :degree])
+   map))
 
 (defmethod second-parse "N" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> (count pos-specific)
-      (case 6 [:stem-1         :part-of-speech :declension :variant :gender :number]
-            7 [:stem-1 :stem-2 :part-of-speech :declension :variant :gender :number])
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+  (parse-terms
+   (case 6 [:stem-1         :part-of-speech :declension :variant :gender :number]
+         7 [:stem-1 :stem-2 :part-of-speech :declension :variant :gender :number])
+   map))
 
 (defmethod second-parse "V" [{:keys [part-of-speech description pos-specific] :as map}]
-  (-> (count pos-specific)
-      (case 5 [:stem-1                         :part-of-speech :declension :variant :transitivity]
-            8 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :transitivity])
-      (zipmap pos-specific)
-      (conj map) (dissoc :pos-specific)))
+  (parse-terms
+   (case 5 [:stem-1                         :part-of-speech :declension :variant :transitivity]
+         8 [:stem-1 :stem-2 :stem-3 :stem-4 :part-of-speech :declension :variant :transitivity])
+   map))
 
 (sm/defn first-parse :- [s/String]
   [index :- s/Int
