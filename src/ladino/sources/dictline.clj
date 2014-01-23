@@ -47,11 +47,11 @@
        (map-vals* parse-token <>)
        (conj map) (dissoc :specific)))
 
-(sm/defn second-parse
+(sm/defn second-parse :- {s/Keyword s/Any}
   [{:keys [specific part-of-speech] :as entry}]
   ;; FIX use datalog instead :D
   (->> rules (find-first (fn [[pos stems]] (and (= pos part-of-speech) (= (count specific) (count stems)))))
-       second (parse-terms entry)))
+       or-die second (parse-terms entry)))
 
 (sm/defn first-parse :- [s/String]
   [index :- s/Int

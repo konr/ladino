@@ -33,3 +33,6 @@
 
 (defn find-first [fn seq]
   (first (filter fn seq)))
+
+(defn or-die [item]
+  (or item (throw (Exception. "Nil element!"))))
