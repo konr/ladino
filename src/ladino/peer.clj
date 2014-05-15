@@ -86,8 +86,7 @@
 
 (sm/defn eid->entity :- ls/Entity
   [eid :- ls/Eid]
-  (->> eid (d/entity (db))
-       seq (into {})))
+  (->> eid (d/entity (db))))
 
 (sm/defn q :- ls/ResultSet
   [query :- ls/Query, & args]
