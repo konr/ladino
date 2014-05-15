@@ -1,12 +1,12 @@
-# About Ladino
+* About Ladino
 
-A modern latin dictionary, built with what I could extract from Whitaker's LATIN.
+A modern latin dictionary, built with what I could extract from Whitaker's WORDS.
 
-## Dedication
+* Dedication
 
 For the benefit of those who keep the fire of civilization alive.
 
-## License
+* License
 
 Copyright © 2013 Konrad Scorciapino
 
